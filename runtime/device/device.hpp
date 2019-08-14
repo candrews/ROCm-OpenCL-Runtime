@@ -21,7 +21,7 @@
 
 #if defined(WITH_LIGHTNING_COMPILER) && !defined(USE_COMGR_LIBRARY)
 #include "caching/cache.hpp"
-#include "driver/AmdCompiler.h"
+#include "AmdCompiler.h"
 #endif  // defined(WITH_LIGHTNING_COMPILER) && ! defined(USE_COMGR_LIBRARY)
 #include "acl.h"
 

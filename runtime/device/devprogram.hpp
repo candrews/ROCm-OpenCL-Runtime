@@ -11,7 +11,7 @@
 
 #if defined(WITH_LIGHTNING_COMPILER) || defined(USE_COMGR_LIBRARY)
 #ifndef USE_COMGR_LIBRARY
-#include "driver/AmdCompiler.h"
+#include "AmdCompiler.h"
 #else
 #include "amd_comgr.h"
 #endif

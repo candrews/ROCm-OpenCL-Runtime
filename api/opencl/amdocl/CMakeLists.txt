@@ -21,7 +21,6 @@ include_directories(${CMAKE_SOURCE_DIR}/api/opencl)
 include_directories(${CMAKE_SOURCE_DIR}/api/opencl/khronos)
 include_directories(${CMAKE_SOURCE_DIR}/api/opencl/khronos/headers)
 include_directories(${CMAKE_SOURCE_DIR}/api/opencl/khronos/headers/opencl2.2)
-include_directories(${CMAKE_SOURCE_DIR}/compiler/driver/src)
 include_directories(${CMAKE_SOURCE_DIR}/compiler/lib)
 include_directories(${CMAKE_SOURCE_DIR}/compiler/lib/include)
 include_directories(${CMAKE_SOURCE_DIR}/compiler/lib/backends/common)
@@ -67,6 +66,9 @@ add_library(amdocl64 SHARED
   ${ADDITIONAL_LIBRARIES}
 )
 
-target_link_libraries(amdocl64 opencl_driver oclelf pthread dl ${ROCR_LIBRARIES})
+target_link_libraries(amdocl64 opencl_driver oclelf pthread dl ${ROCR_LIBRARIES} LLVMBitWriter LLVMIRReader LLVMLinker LLVMMCParser amd_comgr)
 
-install(TARGETS amdocl64 LIBRARY DESTINATION lib/x86_64 COMPONENT applications)
+install(TARGETS amdocl64 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT applications)
+
+file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/amdocl64.icd" CONTENT "$<TARGET_FILE_NAME:amdocl64>")
+install(FILES "${CMAKE_BINARY_DIR}/amdocl64.icd" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}/OpenCL/vendors/")

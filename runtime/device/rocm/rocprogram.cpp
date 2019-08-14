@@ -11,7 +11,7 @@
 #include <gelf.h>
 #include "libraries.amdgcn.inc"
 #ifndef USE_COMGR_LIBRARY
-#include "driver/AmdCompiler.h"
+#include "AmdCompiler.h"
 #endif
 #endif  // defined(WITH_LIGHTNING_COMPILER) || defined(USE_COMGR_LIBRARY)
 

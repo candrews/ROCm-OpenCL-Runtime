@@ -9,7 +9,7 @@
 #include "os/alloc.hpp"
 #include "thread/monitor.hpp"
 #include "utils/util.hpp"
-#include <icd/icd_dispatch.h>
+#include <icd/loader/icd_dispatch.h>
 
 
 #define KHR_CL_TYPES_DO(F)                                                                         \

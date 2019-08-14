@@ -7,13 +7,6 @@ Developer preview Version 2 of the new
 * Supports offline ahead of time compilation today; during the Beta phase we will add in-process/in-memory compilation.
 
 
-## GETTING REPO
-
-Repo is a git wrapper that manages a collection of git repositories. Install this tool and add it to the command search PATH:
-
-    curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-    chmod a+x ~/bin/repo
-
 ## GETTING THE SOURCE CODE
 
 Main OpenCL™ Compatible Components:
@@ -26,11 +19,6 @@ Main OpenCL™ Compatible Components:
 * https://github.com/RadeonOpenCompute/lld 
 * https://github.com/KhronosGroup/OpenCL-ICD-Loader
 
-Download the git projects with the following commands:
-
-    ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime.git -b master -m opencl.xml
-    ~/bin/repo sync
-    
 ## INSTALL ROCm
 
 Follow the instructions at https://rocm.github.io/install.html to install ROCm.
@@ -45,6 +33,11 @@ Copy the amdocl64.icd file to /etc/OpenCL/vendors
 
 To install additional dependencies:
 
+* ROCm-OpenCL-Runtime
+* ROCm-OpenCL-Driver
+* ROC versions of LLVM, Clang, and lld
+* ROCm-Device-Libs
+* OpenCL-ICD-Loader
 * OCaml
 * findlib
 * A Python 2 environment or active virtualenv with the Microsoft Z3 package

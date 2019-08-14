@@ -21,6 +21,8 @@ endif()
 
 project(OpenCL-ROCm)
 
+include (GNUInstallDirs)
+
 # Add path for custom modules
 set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
@@ -38,38 +40,28 @@ set(CLANG_ENABLE_STATIC_ANALYZER OFF CACHE BOOL "")
 # override default option value in library and driver
 set(GENERIC_IS_ZERO ON CACHE BOOL ON FORCE)
 
-add_subdirectory(compiler/llvm EXCLUDE_FROM_ALL)
-
-find_package(LLVM REQUIRED CONFIG PATHS ${CMAKE_BINARY_DIR}/compiler/llvm NO_DEFAULT_PATH)
+find_package(LLVM REQUIRED CONFIG PATHS ${LLVM_DIR} "/opt/rocm/llvm" NO_DEFAULT_PATH)
 
 list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 include(AddLLVM)
 
 add_definitions(${LLVM_DEFINITIONS})
-# TODO: add find_package for Clang and lld, and also use LLVM/Clang variables got from their config
-include_directories(${CMAKE_SOURCE_DIR}/compiler/llvm/tools/clang/include)
-include_directories(${CMAKE_BINARY_DIR}/compiler/llvm/tools/clang/include)
-include_directories(${CMAKE_SOURCE_DIR}/compiler/llvm/tools/lld/include)
-
-# TODO: move AMDGPU.h header to include folder
-include_directories(${CMAKE_SOURCE_DIR}/compiler/llvm/lib/Target/AMDGPU)
-include_directories(${CMAKE_BINARY_DIR}/compiler/llvm/lib/Target/AMDGPU)
-
-if(${USE_COMGR_LIBRARY} MATCHES "yes")
-  set(COMGR_DYN_DLL "yes")
-  add_definitions(-DCOMGR_DYN_DLL="yes")
-  include_directories(${CMAKE_SOURCE_DIR}/compiler/llvm/include)
-  add_definitions(-DUSE_COMGR_LIBRARY)
-else()
-  add_subdirectory(compiler/driver EXCLUDE_FROM_ALL)
-endif()
+set(USE_COMGR_LIBRARY "yes")
+find_package(amd_comgr REQUIRED CONFIG)
+add_definitions(-DUSE_COMGR_LIBRARY)
+FOREACH(DIR ${LLVM_INCLUDE_DIRS})
+  include_directories("${DIR}")
+  include_directories("${DIR}/clang")
+  include_directories("${DIR}/lld")
+  # TODO: move AMDGPU.h header to include folder
+  include_directories("${DIR}/llvm/Target/AMDGPU")
+ENDFOREACH()
 
 set(BUILD_HC_LIB OFF CACHE BOOL "")
 set(ROCM_DEVICELIB_INCLUDE_TESTS OFF CACHE BOOL "")
 set(AMDGCN_TARGETS_LIB_LIST "AMDGCN_LIB_TARGETS")
 set(AMDGCN_TARGETS_LIB_DEPS "AMDGCN_DEP_TARGETS")
 set(AMDGPU_TARGET_TRIPLE "amdgcn-amd-amdhsa-amdgizcl")
-add_subdirectory(library/amdgcn EXCLUDE_FROM_ALL)
 
 add_subdirectory(compiler/lib/loaders/elf/utils/libelf)
 
@@ -82,28 +74,8 @@ set(OPENCL_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/api/opencl/khronos/headers/opencl2.2)
 
 add_subdirectory(api/opencl/amdocl)
-add_subdirectory(api/opencl/khronos/icd)
 
 add_subdirectory(tools/clinfo)
-
-install(PROGRAMS $<TARGET_FILE:clang> $<TARGET_FILE:lld>
-        DESTINATION bin/x86_64
-        COMPONENT libraries)
-
-install(PROGRAMS $<TARGET_FILE:OpenCL>
-        DESTINATION lib/x86_64
-        COMPONENT applications)
-
-install(PROGRAMS $<TARGET_LINKER_FILE:OpenCL>
-        DESTINATION lib/x86_64
-        COMPONENT libraries)
-
-install(DIRECTORY
-        "${CMAKE_CURRENT_SOURCE_DIR}/api/opencl/khronos/headers/opencl2.2/CL"
-        DESTINATION include
-        COMPONENT libraries
-        USE_SOURCE_PERMISSIONS
-        PATTERN cl_egl.h EXCLUDE)
 
 foreach(AMDGCN_LIB_TARGET ${AMDGCN_LIB_TARGETS})
   get_target_property(lib_file_name ${AMDGCN_LIB_TARGET} ARCHIVE_OUTPUT_NAME)
