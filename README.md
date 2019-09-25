@@ -45,6 +45,10 @@ Copy the amdocl64.icd file to /etc/OpenCL/vendors
 
 To install additional dependencies:
 
+* ROCm-OpenCL-Runtime
+* ROCm-OpenCL-Driver
+* ROC versions of LLVM, Clang, and lld
+* ROCm-Device-Libs
 * OCaml
 * findlib
 * A Python 2 environment or active virtualenv with the Microsoft Z3 package

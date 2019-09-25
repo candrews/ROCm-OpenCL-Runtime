@@ -20,7 +20,7 @@
 #include "device/rocm/rocvirtual.hpp"
 #include "device/rocm/rocprogram.hpp"
 #if defined(WITH_LIGHTNING_COMPILER) && ! defined(USE_COMGR_LIBRARY)
-#include "driver/AmdCompiler.h"
+#include "AmdCompiler.h"
 #endif  // defined(WITH_LIGHTNING_COMPILER) && ! defined(USE_COMGR_LIBRARY)
 #include "device/rocm/rocmemory.hpp"
 #include "device/rocm/rocglinterop.hpp"

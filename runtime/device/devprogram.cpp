@@ -14,7 +14,7 @@
 
 #if defined(WITH_LIGHTNING_COMPILER) || defined(USE_COMGR_LIBRARY)
 #ifndef USE_COMGR_LIBRARY
-#include "driver/AmdCompiler.h"
+#include "AmdCompiler.h"
 #include "libraries.amdgcn.inc"
 #include "opencl1.2-c.amdgcn.inc"
 #include "opencl2.0-c.amdgcn.inc"
@@ -706,7 +706,7 @@ bool Program::compileImplLC(const std::string& sourceCode,
   driverOptions.push_back("-amdgpu-prelink");
 
   if (device().settings().lcWavefrontSize64_) {
-     driverOptions.append(" -mwavefrontsize64");
+     driverOptions.push_back(" -mwavefrontsize64");
   }
 
   // Iterate through each source code and dump it into tmp
@@ -1547,7 +1547,7 @@ bool Program::linkImplLC(amd::option::Options* options) {
 #endif
 
   if (device().settings().lcWavefrontSize64_) {
-     codegenOptions.append(" -mwavefrontsize64");
+     codegenOptions.push_back(" -mwavefrontsize64");
   }
 
   // NOTE: The params is also used to identy cached code object. This parameter

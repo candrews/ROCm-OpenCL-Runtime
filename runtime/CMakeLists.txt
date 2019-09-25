@@ -14,8 +14,6 @@ include_directories(${CMAKE_SOURCE_DIR}/api/opencl)
 include_directories(${CMAKE_SOURCE_DIR}/api/opencl/khronos)
 include_directories(${CMAKE_SOURCE_DIR}/api/opencl/khronos/headers)
 include_directories(${CMAKE_SOURCE_DIR}/api/opencl/khronos/headers/opencl2.2)
-include_directories(${CMAKE_SOURCE_DIR}/compiler/llvm/include)
-include_directories(${CMAKE_SOURCE_DIR}/compiler/driver/src)
 include_directories(${CMAKE_SOURCE_DIR}/compiler/lib)
 include_directories(${CMAKE_SOURCE_DIR}/compiler/lib/include)
 include_directories(${CMAKE_SOURCE_DIR}/compiler/lib/backends/common)
@@ -43,6 +41,7 @@ add_library(oclruntime OBJECT
   utils/flags.cpp
   utils/debug.cpp
   device/appprofile.cpp
+  device/comgrctx.cpp
   device/device.cpp
   device/hwdebug.cpp
   device/blitcl.cpp
@@ -71,6 +70,8 @@ add_library(oclruntime OBJECT
   ${COMGR_CPP}
 )
 set_target_properties(oclruntime PROPERTIES POSITION_INDEPENDENT_CODE ON)
+add_dependencies(oclruntime opencl1.2-c.amdgcn.inc_target)
+add_dependencies(oclruntime opencl2.0-c.amdgcn.inc_target)
 
 set(AMDGCN_DEP_LIST)
 if(AMDGCN_TARGETS_LIB_DEPS)
